@@ -20,8 +20,8 @@
 
 ```bash
 # 1. 克隆项目
-git clone https://github.com/你的用户名/你的仓库名.git
-cd 你的仓库名
+git clone https://github.com/nixaveq141-ai/personal-homepage.git
+cd personal-homepage
 
 # 2. 安装依赖
 npm install
@@ -60,6 +60,3 @@ npm start
 └── data/               # JSON 数据库（首次运行自动创建）
 ```
 
-## License
-
-MIT
