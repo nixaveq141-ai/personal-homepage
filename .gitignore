@@ -1,0 +1,11 @@
+node_modules
+.env
+.impeccable
+.impeccable-live
+.impeccable-live.json
+.claude
+.archive
+*.zip
+uploads/
+data/
+/头像.png
