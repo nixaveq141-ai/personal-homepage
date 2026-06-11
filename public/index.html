@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Puearillの主页 - 二次元风格个人主页，就读于北京理工大学。记录项目、文章、照片与音乐。">
+  <meta name="keywords" content="Puearill,个人主页,二次元,博客,北京理工大学">
+  <meta property="og:title" content="Puearillの主页">
+  <meta property="og:description" content="Puearillの个人主页 - 记录学习与生活">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://puearill.top/">
+  <meta name="twitter:card" content="summary">
+  <link rel="icon" href="/头像.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css?v=20260605-cosmos">
+  <title>Puearillの主页</title>
+  <!-- 防闪烁：在渲染前同步设置主题，默认夜间模式 -->
+  <script>
+    (function(){
+      var t = localStorage.getItem('theme') || 'dark';
+      document.documentElement.setAttribute('data-theme', t);
+    })();
+  </script>
+</head>
+<body>
+
+<a href="#main-content" class="skip-link">跳到内容</a>
+
+<!-- ═══════════════ PARTICLE CANVAS ═══════════════ -->
+<canvas id="particleCanvas" aria-hidden="true"></canvas>
+
+<!-- ═══════════════ HEADER / NAV ═══════════════ -->
+<header class="header" id="header">
+  <div class="header-inner">
+    <a href="#home" class="logo-text" data-nav="home">Puearillの主页</a>
+    <nav class="nav-desktop" id="mainNav">
+      <a href="#home" class="nav-link active" data-nav="home">首页</a>
+      <a href="#projects" class="nav-link" data-nav="projects">项目</a>
+      <a href="#articles" class="nav-link" data-nav="articles">文章</a>
+      <a href="#music" class="nav-link" data-nav="music">音乐</a>
+      <span class="nav-sep"></span>
+      <a href="#photos" class="nav-link" data-nav="photos">照片墙</a>
+      <a href="#moments" class="nav-link" data-nav="moments">说说</a>
+      <a href="#about" class="nav-link" data-nav="about">关于</a>
+    </nav>
+    <div class="header-actions">
+      <button class="theme-toggle" id="themeToggle" aria-label="切换暗色模式" title="切换暗色模式">
+        <span class="icon-sun"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg></span>
+        <span class="icon-moon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></span>
+      </button>
+      <button class="hamburger" id="hamburger" aria-label="菜单" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- Mobile nav overlay -->
+<div class="mobile-nav-overlay" id="mobileNavOverlay">
+  <div class="mobile-nav">
+    <a href="#home" class="nav-link-mobile active" data-nav="home">首页</a>
+    <a href="#projects" class="nav-link-mobile" data-nav="projects">项目</a>
+    <a href="#articles" class="nav-link-mobile" data-nav="articles">文章</a>
+    <a href="#music" class="nav-link-mobile" data-nav="music">音乐</a>
+    <span class="nav-sep"></span>
+    <a href="#photos" class="nav-link-mobile" data-nav="photos">照片墙</a>
+    <a href="#moments" class="nav-link-mobile" data-nav="moments">说说</a>
+    <a href="#about" class="nav-link-mobile" data-nav="about">关于</a>
+  </div>
+</div>
+
+<!-- ═══════════════ MAIN CONTENT ═══════════════ -->
+<main id="main-content">
+
+  <!-- ── HOME SECTION (Hero + Blocks) ── -->
+  <section id="home" class="section">
+
+    <!-- Hero — immersive cosmos -->
+    <div class="hero-container">
+      <div class="hero-bg"></div>
+      <div class="hero-content">
+        <div class="hero-text">
+          <div class="hero-avatar-wrapper">
+            <div class="hero-avatar-ring"></div>
+            <img src="/assets/avatar.png" alt="Puearillの头像" class="hero-avatar" id="heroAvatar" loading="eager"
+                 onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2250%22 fill=%22%23c77dff%22/><text x=%2250%22 y=%2265%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2240%22>P</text></svg>'">
+          </div>
+          <h1 class="hero-title" id="typewriter">Puearill</h1>
+          <div class="hero-divider"></div>
+          <p class="hero-subtitle" id="heroSubtitle">就读于北京理工大学的大一生。</p>
+          <div class="hero-contact" id="heroContact"></div>
+        </div>
+        <div class="home-player-wrap">
+          <div class="home-player" id="homePlayer">
+            <div class="home-player-cover" id="homeCover" onclick="window._goToPage('music')"></div>
+            <h4 class="home-player-title" id="homeTitle">加载中...</h4>
+            <p class="home-player-artist" id="homeArtist"></p>
+            <div class="home-player-controls">
+              <button type="button" class="mp-btn" id="hpPrev" onclick="window._mpPrev()"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg></button>
+              <button type="button" class="mp-btn mp-btn-play" id="hpPlay" onclick="window._mpPlay()"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></button>
+              <button type="button" class="mp-btn" id="hpNext" onclick="window._mpNext()"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6z"/></svg></button>
+            </div>
+            <div class="player-progress" style="width:100%;margin-top:4px" id="hpProgressWrap">
+              <span class="time" id="hpTimeCurrent">0:00</span>
+              <div class="progress-bar" id="hpProgressBar">
+                <div class="progress-fill" id="hpProgressFill"></div>
+              </div>
+              <span class="time" id="hpTimeTotal">0:00</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="hero-scroll-indicator" onclick="document.getElementById('home-blocks').scrollIntoView({behavior:'smooth'})">
+        <span>探索</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 13l5 5 5-5M7 6l5 5 5-5"/></svg>
+      </div>
+    </div>
+
+    <!-- Home page lyric bar -->
+    <div class="home-lyric" id="homeLyric" style="display:none"></div>
+
+    <!-- Home scrolling blocks -->
+    <div class="home-blocks" id="home-blocks">
+      <div class="home-block reveal reveal-stagger-1">
+        <h3 class="block-title">近期项目</h3>
+        <div class="carousel" id="carouselProjects">
+          <div class="carousel-track" id="trackProjects"></div>
+          <div class="carousel-dots" id="dotsProjects"></div>
+        </div>
+      </div>
+      <div class="home-block reveal reveal-stagger-2">
+        <h3 class="block-title">近期文章</h3>
+        <div class="carousel" id="carouselArticles">
+          <div class="carousel-track" id="trackArticles"></div>
+          <div class="carousel-dots" id="dotsArticles"></div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ── PROJECTS PAGE ── -->
+  <section id="projects" class="section">
+    <div class="section-header">
+      <h2>🌌 项目</h2>
+      <div class="search-wrapper-inline">
+        <input type="text" class="search-input" placeholder="搜索项目..." data-search="projects" aria-label="搜索项目">
+        <span class="search-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
+      </div>
+    </div>
+    <div class="section-search-results" data-result="projects" style="display:none"></div>
+    <div class="card-grid" id="projectsGrid"></div>
+  </section>
+
+  <!-- ── ARTICLES PAGE ── -->
+  <section id="articles" class="section">
+    <div class="section-header">
+      <h2>📝 文章</h2>
+      <div class="search-wrapper-inline">
+        <input type="text" class="search-input" placeholder="搜索文章..." data-search="articles" aria-label="搜索文章">
+        <span class="search-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
+      </div>
+    </div>
+    <div class="section-search-results" data-result="articles" style="display:none"></div>
+    <div class="card-grid" id="articlesGrid"></div>
+    <div id="articleDetail" style="display:none">
+      <button class="btn-back" onclick="window._closeArticle()">返回文章列表</button>
+      <article class="article-full">
+        <h1 id="articleDetailTitle"></h1>
+        <div class="article-meta" id="articleDetailMeta"></div>
+        <div class="article-body" id="articleDetailBody"></div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ── PHOTOS PAGE ── -->
+  <section id="photos" class="section">
+    <div class="section-header">
+      <h2>📷 照片墙</h2>
+      <div class="search-wrapper-inline">
+        <input type="text" class="search-input" placeholder="搜索照片..." data-search="photos" aria-label="搜索照片">
+        <span class="search-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
+      </div>
+    </div>
+    <div class="section-search-results" data-result="photos" style="display:none"></div>
+    <div class="masonry-grid" id="photosGrid"></div>
+  </section>
+
+  <!-- ── MUSIC PAGE ── -->
+  <section id="music" class="section">
+    <div class="music-layout">
+      <div class="music-main">
+        <div class="player" id="fullPlayer">
+          <h2>🎵 音乐</h2>
+          <div class="player-cover-wrap">
+            <div class="player-cover-ring"></div>
+            <img src="" alt="专辑封面" class="player-cover" id="playerCover"
+                 onerror="this.style.display='none'">
+          </div>
+          <div class="player-info">
+            <h3 id="playerTitle">选择一首歌</h3>
+            <p id="playerArtist">-</p>
+          </div>
+          <div class="player-progress" id="playerProgressWrap">
+            <span class="time" id="timeCurrent">0:00</span>
+            <div class="progress-bar" id="progressBar">
+              <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <span class="time" id="timeTotal">0:00</span>
+          </div>
+          <div class="player-controls">
+            <button id="fpPrev"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg></button>
+            <button id="fpPlay" class="btn-play-lg"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></button>
+            <button id="fpNext"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6z"/></svg></button>
+          </div>
+          <div class="player-volume">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+            <input type="range" id="volumeSlider" min="0" max="100" value="70">
+          </div>
+        </div>
+
+        <!-- Lyrics -->
+        <div class="lyrics-box" id="lyricsBox">
+          <div class="lyrics-scroll" id="lyricsScroll">
+            <p class="lyric-placeholder">暂无歌词</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Playlist -->
+      <div class="music-sidebar">
+        <h3>歌单</h3>
+        <div class="playlist" id="playlist"></div>
+      </div>
+    </div>
+
+    <!-- Comments -->
+    <div class="comments-section reveal">
+      <div class="comments-top-row">
+        <h3>留言</h3>
+        <div class="comments-login-area" id="commentsLoginMusic">
+          <span class="comments-login-hint">评论</span>
+          <button class="btn-github-login" id="btnGithubLoginMusic" onclick="window._loginGithub()">GitHub 登录</button>
+          <div class="user-dropdown" id="userDropdownMusic" style="display:none">
+            <button class="user-dropdown-btn" id="userDropdownBtnMusic" onclick="window._toggleUserDropdown('Music')"></button>
+            <div class="user-dropdown-menu" id="userDropdownMenuMusic" style="display:none">
+              <a href="javascript:void(0)" onclick="window._sortComments('Music','newest')"><span class="sort-dot"></span>从新到旧排序</a>
+              <a href="javascript:void(0)" onclick="window._sortComments('Music','oldest')"><span class="sort-dot"></span>从旧到新排序</a>
+              <a href="javascript:window._logoutGithub()">退出登录</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="comment-form" id="commentFormMusic">
+        <div class="comment-input-wrap" id="commentInputWrapMusic">
+          <textarea placeholder="说点什么吧..." id="commentTextMusic" rows="3"></textarea>
+        </div>
+      </div>
+      <div class="comment-list" id="commentListMusic"></div>
+    </div>
+  </section>
+
+  <!-- ── MOMENTS PAGE (说说) ── -->
+  <section id="moments" class="section">
+    <div class="section-header">
+      <h2>💬 说说</h2>
+      <div class="search-wrapper-inline">
+        <input type="text" class="search-input" placeholder="搜索说说..." data-search="moments" aria-label="搜索说说">
+        <span class="search-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
+      </div>
+    </div>
+    <div class="section-search-results" data-result="moments" style="display:none"></div>
+    <div class="moments-list" id="momentsList"></div>
+  </section>
+
+  <!-- ── ABOUT PAGE ── -->
+  <section id="about" class="section">
+    <div class="about-page">
+      <h2>🔮 关于我</h2>
+      <div class="about-content">
+        <img src="/assets/avatar.png" alt="头像" class="about-avatar"
+             onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2250%22 fill=%22%23c77dff%22/><text x=%2250%22 y=%2265%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2240%22>P</text></svg>'">
+        <div class="about-text-content" id="aboutContent">
+          <p>大家好，我是 Puearill，目前就读于北京理工大学。</p>
+          <p>热爱编程、二次元文化和音乐。喜欢探索新技术，尤其对前端开发和用户体验设计感兴趣。</p>
+        </div>
+      </div>
+      <div class="about-details">
+        <div class="detail-item"><span class="detail-label">教育经历</span><span>北京理工大学 本科在读</span></div>
+        <div class="detail-item"><span class="detail-label">所在城市</span><span>北京</span></div>
+        <div class="detail-item"><span class="detail-label">兴趣</span><span>编程 · 二次元 · 音乐 · 前端开发</span></div>
+      </div>
+    </div>
+
+    <!-- Comments -->
+    <div class="comments-section reveal">
+      <div class="comments-top-row">
+        <h3>留言</h3>
+        <div class="comments-login-area" id="commentsLoginAbout">
+          <span class="comments-login-hint">评论</span>
+          <button class="btn-github-login" id="btnGithubLoginAbout" onclick="window._loginGithub()">GitHub 登录</button>
+          <div class="user-dropdown" id="userDropdownAbout" style="display:none">
+            <button class="user-dropdown-btn" id="userDropdownBtnAbout" onclick="window._toggleUserDropdown('About')"></button>
+            <div class="user-dropdown-menu" id="userDropdownMenuAbout" style="display:none">
+              <a href="javascript:void(0)" onclick="window._sortComments('About','newest')"><span class="sort-dot"></span>从新到旧排序</a>
+              <a href="javascript:void(0)" onclick="window._sortComments('About','oldest')"><span class="sort-dot"></span>从旧到新排序</a>
+              <a href="javascript:window._logoutGithub()">退出登录</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="comment-form" id="commentFormAbout">
+        <div class="comment-input-wrap" id="commentInputWrapAbout">
+          <textarea placeholder="说点什么吧..." id="commentTextAbout" rows="3"></textarea>
+        </div>
+      </div>
+      <div class="comment-list" id="commentListAbout"></div>
+    </div>
+  </section>
+
+</main>
+
+<!-- 防闪烁：根据 URL hash 立即显示对应区块 + 导航高亮 -->
+<script>
+(function(){
+  var hash = window.location.hash.replace('#/', '#').replace('#', '') || 'home';
+  var el = document.getElementById(hash);
+  if (el) el.classList.add('section-visible');
+  else {
+    var home = document.getElementById('home');
+    if (home) home.classList.add('section-visible');
+  }
+  // Also set correct nav active state to avoid flash to "首页"
+  var links = document.querySelectorAll('.nav-link, .nav-link-mobile');
+  for (var i = 0; i < links.length; i++) {
+    links[i].classList.toggle('active', links[i].getAttribute('data-nav') === hash);
+  }
+})();
+</script>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="图片预览">
+  <button class="lightbox-close" aria-label="关闭">&times;</button>
+  <img src="" alt="" id="lightboxImg">
+</div>
+
+<!-- ═══════════════ FOOTER ═══════════════ -->
+<footer class="footer">
+  <p>&copy; 2026 Puearill. Powered by Node.js & Express.</p>
+</footer>
+
+<!-- ═══════════════ SCRIPTS ═══════════════ -->
+<!-- Reveal observer: replaces AOS -->
+<script>
+(function(){
+  const observer = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if(entry.isIntersecting){
+        entry.target.classList.add('revealed');
+        observer.unobserve(entry.target);
+      }
+    });
+  },{ threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+
+  document.querySelectorAll('.reveal').forEach(function(el){
+    observer.observe(el);
+  });
+
+  /* Re-scan for dynamically added .reveal elements (cards loaded by app.js) */
+  window._observeReveal = function(root){
+    if(!root) root = document;
+    root.querySelectorAll('.reveal:not(.revealed)').forEach(function(el){
+      // Check if element is already in viewport — if so, reveal immediately
+      var rect = el.getBoundingClientRect();
+      if (rect.top < window.innerHeight && rect.bottom > 0) {
+        el.classList.add('revealed');
+        observer.unobserve(el);
+      } else {
+        observer.observe(el);
+      }
+    });
+  };
+})();
+</script>
+<script src="/app.js?v=20260607"></script>
+
+</body>
+</html>

@@ -1,0 +1,18 @@
+{
+  "name": "puearill-homepage",
+  "version": "1.0.0",
+  "description": "Puearillの主页 - 二次元毛玻璃个人主页",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "init-db": "node database.js"
+  },
+  "dependencies": {
+    "axios": "^1.7.7",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.0",
+    "express-session": "^1.18.1",
+    "multer": "^2.1.1",
+    "uuid": "^10.0.0"
+  }
+}

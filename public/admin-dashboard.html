@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="icon" href="/头像.png">
+  <title>管理后台 - Puearillの主页</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --cosmos: oklch(0.22 0.08 278); --surface: oklch(0.28 0.05 278);
+      --starlight: oklch(0.93 0.003 280); --stardust: oklch(0.73 0.006 278);
+      --nebula: oklch(0.62 0.012 280);
+      --firefly: oklch(0.78 0.17 90); --cosmos-flare: oklch(0.55 0.20 320);
+      --firefly-pale: oklch(0.28 0.06 88); --flare-pale: oklch(0.30 0.08 315);
+      --void: oklch(0.30 0.03 280); --radius: 14px;
+      --shadow: 0 2px 12px oklch(0 0 0 / 0.3); --green: #27ae60; --red: #e74c3c; --orange: #f39c12;
+    }
+    [data-theme="light"] {
+      --cosmos: oklch(0.96 0.008 272); --surface: oklch(0.99 0.002 270);
+      --starlight: oklch(0.15 0.018 280); --stardust: oklch(0.35 0.025 280);
+      --nebula: oklch(0.50 0.018 280);
+      --firefly: oklch(0.58 0.16 265); --cosmos-flare: oklch(0.45 0.22 320);
+      --firefly-pale: oklch(0.92 0.02 265); --flare-pale: oklch(0.90 0.04 315);
+      --void: oklch(0.82 0.02 275); --shadow: 0 2px 12px oklch(0.15 0.015 280 / 0.08);
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:'Noto Sans SC',sans-serif; background:var(--cosmos); color:var(--starlight); min-height:100vh; }
+
+    /* Top bar */
+    .topbar {
+      background:var(--surface); border-bottom:1px solid var(--void);
+      padding:0 28px; height:60px; display:flex; align-items:center; justify-content:space-between;
+      position:sticky; top:0; z-index:100; box-shadow:var(--shadow);
+    }
+    .topbar-logo { font-weight:700; font-size:1.05rem; letter-spacing:-0.3px; }
+    .topbar-logo span { color:var(--firefly); }
+    .topbar-actions { display:flex; gap:12px; align-items:center; }
+    .topbar-actions .user-tag { font-size:0.82rem; color:var(--stardust); }
+    .btn-outline { padding:6px 16px; border:1px solid var(--void); border-radius:20px; background:none; cursor:pointer; color:var(--starlight); font-family:inherit; font-size:0.82rem; transition:all .2s; }
+    .btn-outline:hover { border-color:var(--red); color:var(--red); }
+
+    /* Layout */
+    .layout { display:flex; min-height:calc(100vh - 60px); }
+    .sidebar {
+      width:210px; background:var(--surface); border-right:1px solid var(--void);
+      padding:16px 0; flex-shrink:0; overflow-y:auto;
+    }
+    .sidebar-section { padding:4px 20px 8px; font-size:0.7rem; color:var(--stardust); text-transform:uppercase; letter-spacing:1px; margin-top:8px; }
+    .sidebar a {
+      display:flex; align-items:center; gap:10px; padding:10px 20px; color:var(--stardust); font-size:0.88rem;
+      cursor:pointer; transition:all .15s; border-left:3px solid transparent; text-decoration:none;
+    }
+    .sidebar a:hover { color:var(--starlight); background:var(--firefly-pale); }
+    .sidebar a.active { color:var(--firefly); background:var(--firefly-pale); border-left-color:var(--firefly); font-weight:500; }
+    .sidebar a .icon { font-size:1.1rem; width:22px; text-align:center; }
+
+    /* Content */
+    .content { flex:1; padding:28px; overflow-y:auto; max-height:calc(100vh - 60px); }
+
+    /* Page header */
+    .page-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:24px; flex-wrap:wrap; gap:12px; }
+    .page-header h2 { font-size:1.35rem; font-weight:600; }
+    .btn { padding:8px 18px; border:none; border-radius:8px; cursor:pointer; font-size:0.85rem; font-family:inherit; font-weight:500; transition:all .2s; display:inline-flex; align-items:center; gap:6px; }
+    .btn-primary { background:var(--firefly); color:#fff; }
+    .btn-primary:hover { background:var(--cosmos-flare); transform:translateY(-1px); box-shadow:0 4px 12px oklch(0.78 0.17 90 / 0.3); }
+    .btn-danger { background:var(--red); color:#fff; }
+    .btn-danger:hover { opacity:0.85; }
+    .btn-sm { padding:5px 12px; font-size:0.78rem; border-radius:6px; }
+
+    /* Cards */
+    .card { background:var(--surface); border-radius:var(--radius); border:1px solid var(--void); box-shadow:var(--shadow); margin-bottom:20px; overflow:hidden; }
+    .card-header { padding:16px 22px; border-bottom:1px solid var(--void); font-weight:600; font-size:0.95rem; display:flex; justify-content:space-between; align-items:center; }
+    .card-body { padding:20px 22px; }
+    .card-body.no-padding { padding:0; }
+
+    /* Tables */
+    .table-wrap { overflow-x:auto; }
+    table { width:100%; border-collapse:collapse; font-size:0.85rem; }
+    th { text-align:left; padding:12px 16px; background:var(--cosmos); color:var(--stardust); font-weight:500; font-size:0.78rem; text-transform:uppercase; letter-spacing:0.5px; white-space:nowrap; }
+    td { padding:12px 16px; border-bottom:1px solid var(--void); vertical-align:middle; }
+    tr:last-child td { border-bottom:none; }
+    tr:hover td { background:var(--firefly-pale); }
+    .text-truncate { max-width:200px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; display:inline-block; }
+    .badge { display:inline-block; padding:2px 8px; border-radius:10px; font-size:0.72rem; font-weight:500; }
+    .badge-author { background:linear-gradient(135deg,var(--firefly),var(--cosmos-flare)); color:#fff; }
+    .badge-music { background:var(--firefly-pale); color:var(--firefly); }
+    .badge-about { background:var(--flare-pale); color:var(--cosmos-flare); }
+
+    /* Stats row */
+    .stats-row { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:16px; margin-bottom:24px; }
+    .stat-card { background:var(--surface); border:1px solid var(--void); border-radius:var(--radius); padding:18px 22px; }
+    .stat-card .stat-num { font-size:2rem; font-weight:700; color:var(--firefly); }
+    .stat-card .stat-label { font-size:0.82rem; color:var(--stardust); margin-top:2px; }
+
+    /* Form elements */
+    input[type="text"],input[type="url"],input[type="number"],textarea,select {
+      width:100%; padding:10px 14px; border:1px solid var(--void); border-radius:10px;
+      background:var(--surface); color:var(--starlight); font-size:0.88rem; outline:none; font-family:inherit;
+      transition:all .25s ease; box-shadow:inset 0 1px 3px oklch(0 0 0 / 0.1);
+    }
+    input[type="text"]:hover,input[type="url"]:hover,input[type="number"]:hover,textarea:hover,select:hover {
+      border-color:var(--nebula);
+    }
+    input[type="text"]:focus,input[type="url"]:focus,input[type="number"]:focus,textarea:focus,select:focus {
+      border-color:var(--firefly); background:var(--surface);
+      box-shadow:0 0 0 3px oklch(0.78 0.17 90 / 0.12), inset 0 1px 3px oklch(0 0 0 / 0.08);
+    }
+    input::placeholder,textarea::placeholder { color:var(--nebula); opacity:0.7; }
+    select { appearance:none; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23888' d='M6 8L1 3h10z'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 14px center; padding-right:36px; cursor:pointer; }
+    textarea { resize:vertical; min-height:80px; line-height:1.6; }
+    .form-inline { display:flex; gap:10px; align-items:flex-end; flex-wrap:wrap; }
+    .form-inline > div { flex:1; min-width:120px; }
+    .form-inline label { display:block; font-size:0.78rem; color:var(--stardust); margin-bottom:4px; }
+
+    /* Modal */
+    .modal-overlay { display:none; position:fixed; inset:0; z-index:200; background:rgba(0,0,0,0.35); backdrop-filter:blur(2px); align-items:center; justify-content:center; }
+    .modal-overlay.active { display:flex; }
+    .modal { background:var(--surface); border-radius:var(--radius); padding:28px; width:580px; max-width:92vw; max-height:85vh; overflow-y:auto; box-shadow:0 8px 40px rgba(0,0,0,0.15); border:1px solid var(--void); }
+    .modal h3 { font-size:1.15rem; margin-bottom:20px; }
+    .modal .form-group { margin-bottom:14px; }
+    .modal .form-group label { display:block; font-size:0.82rem; color:var(--stardust); margin-bottom:4px; font-weight:500; }
+    .modal-actions { display:flex; gap:10px; justify-content:flex-end; margin-top:24px; }
+    .btn-cancel { padding:8px 18px; border:1px solid var(--void); border-radius:8px; background:transparent; cursor:pointer; color:var(--stardust); font-family:inherit; font-size:0.85rem; transition:all .2s; }
+    .btn-cancel:hover { border-color:var(--nebula); color:var(--starlight); }
+
+    /* Parse section */
+    .parse-box { padding:16px; background:var(--surface); border:1px solid var(--void); border-radius:var(--radius); margin-bottom:16px; }
+    .parse-box h4 { font-size:0.9rem; margin-bottom:10px; }
+    .parse-row { display:flex; gap:10px; }
+    .parse-result { margin-top:10px; font-size:0.85rem; }
+
+    /* Moment comments */
+    .moment-group { border:1px solid var(--void); border-radius:var(--radius); margin-bottom:20px; overflow:hidden; }
+    .moment-group-header { padding:14px 20px; background:var(--surface); border-bottom:1px solid var(--void); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; }
+    .moment-group-header .moment-text { font-weight:600; }
+    .moment-group-header .moment-meta { font-size:0.78rem; color:var(--stardust); white-space:nowrap; }
+    .comment-item { padding:14px 20px; border-bottom:1px solid var(--void); }
+    .comment-item:last-child { border-bottom:none; }
+    .comment-reply { margin-left:32px; margin-top:10px; padding:12px 16px; background:var(--surface); border-radius:10px; border-left:3px solid var(--firefly); }
+
+    /* Config */
+    .config-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+    .config-item { display:flex; flex-direction:column; gap:4px; }
+    .config-item label { font-size:0.82rem; color:var(--stardust); font-weight:500; }
+    .config-item.full { grid-column:1/-1; }
+
+    /* Image upload drop zone */
+    .img-upload-group { display:flex; gap:12px; align-items:flex-start; flex-wrap:wrap; }
+    .img-upload-group > div:first-child { flex:1; min-width:200px; }
+    .drop-zone {
+      border:2px dashed var(--void); border-radius:12px; padding:24px; text-align:center;
+      cursor:pointer; transition:all .25s ease; background:var(--surface); min-width:160px;
+      display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px;
+      position:relative; overflow:hidden;
+    }
+    .drop-zone:hover, .drop-zone.dragover { border-color:var(--firefly); background:var(--firefly-pale); box-shadow:0 0 0 4px oklch(0.78 0.17 90 / 0.08); }
+    .drop-zone .dz-icon { font-size:1.5rem; }
+    .drop-zone .dz-text { font-size:0.78rem; color:var(--stardust); }
+    .drop-zone img { max-width:100%; max-height:120px; border-radius:8px; margin-top:6px; }
+    .drop-zone-input { position:absolute; inset:0; opacity:0; cursor:pointer; width:100%; height:100%; }
+
+    /* Tag input */
+    .tag-input-wrap {
+      border:1px solid var(--void); border-radius:10px; padding:8px 12px; background:var(--surface);
+      display:flex; flex-wrap:wrap; gap:6px; align-items:center; cursor:text; min-height:44px;
+      transition:all .25s ease; box-shadow:inset 0 1px 3px oklch(0 0 0 / 0.1);
+    }
+    .tag-input-wrap:focus-within { border-color:var(--firefly); box-shadow:0 0 0 3px oklch(0.78 0.17 90 / 0.12), inset 0 1px 3px oklch(0 0 0 / 0.08); }
+    .tag-input-wrap input { border:none; background:none; outline:none; flex:1; min-width:100px; font-size:0.85rem; color:var(--starlight); padding:4px; font-family:inherit; }
+    .tag-input-wrap input::placeholder { color:var(--nebula); opacity:0.7; }
+    .tag-display { display:flex; flex-wrap:wrap; gap:5px; }
+    .tag-chip { display:inline-flex; align-items:center; gap:4px; padding:4px 12px; background:var(--firefly-pale); color:var(--firefly); border-radius:14px; font-size:0.82rem; font-weight:500; }
+    .tag-chip-del { cursor:pointer; font-weight:bold; opacity:0.4; font-size:1rem; line-height:1; transition:all .15s; }
+    .tag-chip-del:hover { opacity:1; color:var(--red); }
+
+    /* Rich text editor */
+    [data-richtext] { border-radius:10px; overflow:hidden; }
+    [data-richtext] > div:first-child { padding:8px 10px !important; gap:4px !important; }
+    [data-richtext] [contenteditable] { line-height:1.8 !important; }
+    [data-richtext] [contenteditable]:focus { box-shadow:inset 0 0 0 1px var(--firefly); }
+
+    /* Responsive */
+    @media (max-width:768px) {
+      .layout { flex-direction:column; }
+      .sidebar { width:100%; display:flex; overflow-x:auto; padding:0; border-right:none; border-bottom:1px solid var(--void); }
+      .sidebar a { border-left:none; border-bottom:3px solid transparent; white-space:nowrap; flex-shrink:0; }
+      .sidebar a.active { border-bottom-color:var(--firefly); }
+      .sidebar-section { display:none; }
+      .content { padding:18px; }
+      .config-grid { grid-template-columns:1fr; }
+      .stats-row { grid-template-columns:1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-logo">Puearill <span>管理后台</span></div>
+  <div class="topbar-actions">
+    <span class="user-tag" id="adminName"></span>
+    <a href="https://puearill.top" target="_blank" class="btn-outline" style="border-color:var(--firefly);color:var(--firefly)">查看网站</a>
+    <button class="btn-outline" onclick="logout()">退出登录</button>
+  </div>
+</div>
+
+<div class="layout">
+  <nav class="sidebar" id="sidebar">
+    <div class="sidebar-section">概览</div>
+    <a class="active" data-tab="tab-dashboard">仪表盘</a>
+    <div class="sidebar-section">内容管理</div>
+    <a data-tab="tab-projects">项目</a>
+    <a data-tab="tab-articles">文章</a>
+    <a data-tab="tab-photos">照片</a>
+    <a data-tab="tab-songs">音乐</a>
+    <a data-tab="tab-moments">说说</a>
+    <div class="sidebar-section">互动</div>
+    <a data-tab="tab-comments">留言</a>
+    <a data-tab="tab-moment-comments">说说互动</a>
+    <div class="sidebar-section">设置</div>
+    <a data-tab="tab-config">网站设置</a>
+  </nav>
+
+  <main class="content" id="mainContent"></main>
+</div>
+
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <h3 id="modalTitle"></h3>
+    <div id="modalBody"></div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal()">取消</button>
+      <button class="btn btn-primary" id="modalSave">保存</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── Auth ──────────────────────────────────────────────────
+let currentTab = 'tab-dashboard';
+
+(async function init(){
+  try {
+    const res = await fetch('/admin/check');
+    if (!res.ok) { window.location.href = '/admin-login.html'; return; }
+    const data = await res.json();
+    document.getElementById('adminName').textContent = data.username;
+    initSidebar();
+    loadTab('tab-dashboard');
+  } catch { window.location.href = '/admin-login.html'; }
+})();
+
+async function logout() {
+  await fetch('/admin/logout', { method: 'POST' });
+  window.location.href = '/admin-login.html';
+}
+
+// ── API helper ────────────────────────────────────────────
+async function api(method, path, body) {
+  const opts = { method, headers: { 'Content-Type': 'application/json' } };
+  if (body) opts.body = JSON.stringify(body);
+  const res = await fetch(`/admin${path}`, opts);
+  if (res.status === 401) { window.location.href = '/admin-login.html'; throw new Error('Unauthorized'); }
+  if (!res.ok) { const e = await res.json().catch(()=>({})); throw new Error(e.error || 'Request failed'); }
+  return res;
+}
+
+// ── Sidebar ───────────────────────────────────────────────
+function initSidebar() {
+  document.querySelectorAll('#sidebar a').forEach(a => {
+    a.addEventListener('click', () => {
+      document.querySelectorAll('#sidebar a').forEach(x => x.classList.remove('active'));
+      a.classList.add('active');
+      currentTab = a.dataset.tab;
+      loadTab(currentTab);
+    });
+  });
+}
+
+// ── Tab router ────────────────────────────────────────────
+async function loadTab(tab) {
+  currentTab = tab;
+  document.querySelectorAll('#sidebar a').forEach(x => x.classList.remove('active'));
+  const link = document.querySelector(`#sidebar a[data-tab="${tab}"]`);
+  if (link) link.classList.add('active');
+
+  const mc = document.getElementById('mainContent');
+  mc.innerHTML = '<div style="text-align:center;padding:60px;color:var(--stardust)">加载中...</div>';
+  try {
+    switch (tab) {
+      case 'tab-dashboard': await loadDashboard(mc); break;
+      case 'tab-projects': await loadCrudTab(mc, 'projects', '项目'); break;
+      case 'tab-articles': await loadCrudTab(mc, 'articles', '文章'); break;
+      case 'tab-photos': await loadCrudTab(mc, 'photos', '照片'); break;
+      case 'tab-songs': await loadSongsTab(mc); break;
+      case 'tab-moments': await loadCrudTab(mc, 'moments', '说说'); break;
+      case 'tab-comments': await loadCommentsTab(mc); break;
+      case 'tab-moment-comments': await loadMomentCommentsTab(mc); break;
+      case 'tab-config': await loadConfigTab(mc); break;
+    }
+  } catch(e) { mc.innerHTML = '<p style="color:var(--red);text-align:center;padding:40px">加载失败: ' + e.message + '</p>'; }
+}
+
+// ── Dashboard ─────────────────────────────────────────────
+async function loadDashboard(container) {
+  const [stats, moments, comments, momentComments] = await Promise.all([
+    fetch('/api/stats').then(r=>r.json()),
+    fetch('/api/moments').then(r=>r.json()),
+    fetch('/admin/comments').then(r=>r.json()),
+    fetch('/admin/moment-comments').then(r=>r.json())
+  ]);
+  container.innerHTML = `
+    <div class="page-header"><h2>仪表盘</h2></div>
+    <div class="stats-row">
+      <div class="stat-card"><div class="stat-num">${stats.projects||0}</div><div class="stat-label">项目</div></div>
+      <div class="stat-card"><div class="stat-num">${stats.articles||0}</div><div class="stat-label">文章</div></div>
+      <div class="stat-card"><div class="stat-num">${stats.photos||0}</div><div class="stat-label">照片</div></div>
+      <div class="stat-card"><div class="stat-num">${moments.length}</div><div class="stat-label">说说</div></div>
+      <div class="stat-card"><div class="stat-num">${comments.length}</div><div class="stat-label">音乐/关于留言</div></div>
+      <div class="stat-card"><div class="stat-num">${momentComments.length}</div><div class="stat-label">说说互动</div></div>
+    </div>
+    <div class="card"><div class="card-header">快捷操作</div>
+      <div class="card-body" style="display:flex;gap:12px;flex-wrap:wrap">
+        <button class="btn btn-primary" onclick="loadTab('tab-songs')">添加音乐</button>
+        <button class="btn btn-primary" onclick="loadTab('tab-moments')">发说说</button>
+        <button class="btn btn-primary" onclick="loadTab('tab-articles')">写文章</button>
+        <button class="btn btn-primary" onclick="loadTab('tab-comments')">管理留言</button>
+      </div>
+    </div>`;
+}
+
+// ── Generic CRUD tab ──────────────────────────────────────
+async function loadCrudTab(container, type, label) {
+  const fields = getFields(type);
+  const res = await api('GET', `/${type}`);
+  const items = await res.json();
+
+  let html = `<div class="page-header"><h2>${label}管理</h2>
+    <button class="btn btn-primary" onclick="showCreateModal('${type}')">+ 新增</button></div>`;
+
+  if (!items.length) {
+    html += '<div class="card"><div class="card-body" style="text-align:center;color:var(--stardust);padding:40px">暂无数据</div></div>';
+    container.innerHTML = html;
+    return;
+  }
+
+  html += '<div class="card"><div class="card-body no-padding"><div class="table-wrap"><table><thead><tr><th>ID</th>';
+  fields.forEach(f => html += `<th>${f.label}</th>`);
+  html += '<th>时间</th><th style="text-align:right">操作</th></tr></thead><tbody>';
+
+  items.forEach(item => {
+    html += '<tr><td>' + item.id + '</td>';
+    fields.forEach(f => {
+      let val = item[f.key] || '';
+      if (f.key === 'content' && val.length > 80) val = val.replace(/<[^>]+>/g,'').slice(0, 80) + '...';
+      if (f.key === 'tags') {
+        try { const arr = JSON.parse(val); val = arr.map(t => `<span class="badge badge-music" style="margin:1px">${t}</span>`).join(' '); } catch { val = ''; }
+        html += `<td>${val}</td>`;
+      } else {
+        html += `<td>${f.key === 'description' || f.key === 'summary' || f.key === 'content' ? `<span class="text-truncate">${val}</span>` : val}</td>`;
+      }
+    });
+    html += `<td style="white-space:nowrap;font-size:0.78rem;color:var(--stardust)">${new Date(item.created_at).toLocaleString('zh-CN')}</td>`;
+    html += `<td style="text-align:right;white-space:nowrap">
+      <button class="btn btn-sm btn-primary" onclick="showEditModal('${type}', ${item.id})">编辑</button>
+      <button class="btn btn-sm btn-danger" onclick="deleteItem('${type}', ${item.id}, '${label}')">删除</button>
+    </td></tr>`;
+  });
+
+  html += '</tbody></table></div></div></div>';
+  container.innerHTML = html;
+}
+
+// ── Modal helpers ─────────────────────────────────────────
+function showModal(title, formHtml, onSave) {
+  document.getElementById('modalTitle').textContent = title;
+  document.getElementById('modalBody').innerHTML = formHtml;
+  document.getElementById('modal').classList.add('active');
+  document.getElementById('modalSave').onclick = async () => {
+    try { await onSave(); closeModal(); } catch(e) { alert(e.message); }
+  };
+}
+
+function closeModal() {
+  document.getElementById('modal').classList.remove('active');
+}
+
+document.getElementById('modal').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+
+window.showCreateModal = function(type) {
+  const fields = getFields(type);
+  const formHtml = fields.map(f => renderFormField(f, '')).join('');
+  showModal('新增' + getLabel(type), formHtml, async () => {
+    const data = {};
+    document.querySelectorAll('#modalBody [name]').forEach(el => { if (el.name) data[el.name] = el.value; });
+    await api('POST', `/${type}`, data);
+    loadTab(currentTab);
+  });
+};
+
+window.showEditModal = async function(type, id) {
+  const res = await api('GET', `/${type}`);
+  const items = await res.json();
+  const item = items.find(i => i.id === id);
+  if (!item) return;
+  const fields = getFields(type);
+  const formHtml = fields.map(f => renderFormField(f, item[f.key] || '')).join('');
+  showModal('编辑' + getLabel(type), formHtml, async () => {
+    const data = {};
+    document.querySelectorAll('#modalBody [name]').forEach(el => { if (el.name) data[el.name] = el.value; });
+    await api('PUT', `/${type}/${id}`, data);
+    loadTab(currentTab);
+  });
+};
+
+window.deleteItem = async function(type, id, label) {
+  if (!confirm(`确定删除这条${label||''}？此操作不可恢复。`)) return;
+  try { await api('DELETE', `/${type}/${id}`); loadTab(currentTab); } catch(e) { alert('删除失败: '+e.message); }
+};
+
+function getFields(type) {
+  const map = {
+    projects: [
+      {key:'title',label:'标题',type:'text'},
+      {key:'description',label:'描述',type:'textarea'},
+      {key:'cover_image',label:'封面图',type:'text'},
+      {key:'image_url',label:'展示图链接',type:'text'},
+      {key:'project_url',label:'项目链接',type:'text'},
+      {key:'tags',label:'标签',type:'tags'}
+    ],
+    articles: [
+      {key:'title',label:'标题',type:'text'},
+      {key:'summary',label:'摘要',type:'textarea'},
+      {key:'content',label:'正文',type:'richtext'},
+      {key:'cover_image',label:'封面图链接',type:'text'},
+      {key:'tags',label:'标签',type:'tags'}
+    ],
+    photos: [
+      {key:'title',label:'标题',type:'text'},
+      {key:'url',label:'图片链接',type:'text'},
+      {key:'thumbnail_url',label:'缩略图链接',type:'text'},
+      {key:'description',label:'描述',type:'textarea'}
+    ],
+    moments: [
+      {key:'content',label:'内容',type:'textarea'}
+    ]
+  };
+  return map[type] || [];
+}
+
+// ── Tag input widget ──────────────────────────────────────
+function createTagInput(name, initialValue) {
+  let tags = [];
+  try { tags = JSON.parse(initialValue); } catch { tags = []; }
+  if (!Array.isArray(tags)) tags = [];
+
+  const container = document.createElement('div');
+  container.className = 'tag-input-wrap';
+  container.dataset.fieldName = name;
+
+  const display = document.createElement('div');
+  display.className = 'tag-display';
+  container.appendChild(display);
+
+  const input = document.createElement('input');
+  input.placeholder = '输入标签后按回车...';
+  container.appendChild(input);
+
+  function renderTags() {
+    display.innerHTML = tags.map((t, i) =>
+      `<span class="tag-chip">${t}<span class="tag-chip-del" data-idx="${i}">&times;</span></span>`
+    ).join('');
+    display.querySelectorAll('.tag-chip-del').forEach(el => {
+      el.addEventListener('click', () => {
+        tags.splice(parseInt(el.dataset.idx), 1);
+        renderTags();
+        input.focus();
+      });
+    });
+    container._value = JSON.stringify(tags);
+  }
+
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      const val = input.value.trim();
+      if (val && !tags.includes(val)) {
+        tags.push(val);
+        renderTags();
+      }
+      input.value = '';
+    }
+  });
+
+  renderTags();
+  container._value = JSON.stringify(tags);
+  return container;
+}
+
+function createRichTextEditor(name, initialValue) {
+  const container = document.createElement('div');
+  container.dataset.richtext = name;
+  container.style.cssText = 'border:1px solid var(--void);border-radius:8px;overflow:hidden;background:var(--surface)';
+
+  const toolbar = document.createElement('div');
+  toolbar.style.cssText = 'display:flex;gap:3px;padding:6px 8px;background:var(--cosmos);border-bottom:1px solid var(--void);flex-wrap:wrap;align-items:center';
+
+  const btnBase = 'padding:4px 8px;border:1px solid var(--void);border-radius:4px;background:var(--surface);color:var(--starlight);cursor:pointer;font-size:0.85rem;line-height:1;min-width:28px;text-align:center';
+
+  function tbBtn(html, cmd, val, title) {
+    const btn = document.createElement('button');
+    btn.type = 'button'; btn.title = title || '';
+    btn.innerHTML = html;
+    btn.style.cssText = btnBase;
+    btn.addEventListener('mouseenter', () => btn.style.background = 'var(--cosmos)');
+    btn.addEventListener('mouseleave', () => btn.style.background = 'var(--surface)');
+    if (cmd) {
+      btn.addEventListener('click', () => {
+        editor.focus();
+        if (cmd === 'createLink') {
+          const url = prompt('输入链接URL：', 'https://');
+          if (url) document.execCommand(cmd, false, url);
+        } else {
+          document.execCommand(cmd, false, val || null);
+        }
+        editor.dispatchEvent(new Event('input'));
+      });
+    }
+    toolbar.appendChild(btn);
+    return btn;
+  }
+
+  toolbar.appendChild(tbBtn('<b>B</b>', 'bold', null, '加粗'));
+  toolbar.appendChild(tbBtn('<i>I</i>', 'italic', null, '斜体'));
+  toolbar.appendChild(tbBtn('<u>U</u>', 'underline', null, '下划线'));
+  toolbar.appendChild(tbBtn('<s>S</s>', 'strikeThrough', null, '删除线'));
+
+  const sep = () => { const s=document.createElement('span'); s.textContent='|'; s.style.cssText='color:var(--void);font-size:0.7rem;margin:0 4px'; toolbar.appendChild(s); };
+  sep();
+
+  toolbar.appendChild(tbBtn('H1', 'formatBlock', 'h2', '大标题'));
+  toolbar.appendChild(tbBtn('H2', 'formatBlock', 'h3', '中标题'));
+  toolbar.appendChild(tbBtn('H3', 'formatBlock', 'h4', '小标题'));
+  sep();
+
+  toolbar.appendChild(tbBtn('&#x2022;', 'insertUnorderedList', null, '无序列表'));
+  toolbar.appendChild(tbBtn('1.', 'insertOrderedList', null, '有序列表'));
+  toolbar.appendChild(tbBtn('&#x2500;&#x2500;', 'insertHorizontalRule', null, '分隔线'));
+  toolbar.appendChild(tbBtn('&#x1F517;', 'createLink', null, '插入链接'));
+  sep();
+
+  // Image
+  const imgBtn = document.createElement('button');
+  imgBtn.type = 'button'; imgBtn.title = '插入图片';
+  imgBtn.innerHTML = '&#x1F5BC;';
+  imgBtn.style.cssText = btnBase;
+  const imgInput = document.createElement('input');
+  imgInput.type = 'file'; imgInput.accept = 'image/*';
+  imgInput.style.cssText = 'position:absolute;opacity:0;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)';
+  imgBtn.addEventListener('click', () => { editor.focus(); imgInput.click(); });
+  imgInput.addEventListener('change', async function () {
+    if (!this.files[0]) return;
+    try {
+      const fd = new FormData();
+      fd.append('file', this.files[0]);
+      const r = await fetch('/admin/upload', { method: 'POST', body: fd });
+      if (r.ok) { const d = await r.json(); editor.focus(); document.execCommand('insertImage', false, d.url); editor.dispatchEvent(new Event('input')); }
+    } catch (e) { alert('上传失败: ' + e.message); }
+    this.value = '';
+  });
+  toolbar.appendChild(imgBtn);
+  toolbar.appendChild(imgInput);
+
+  toolbar.appendChild(tbBtn('&#x275D;', 'formatBlock', 'blockquote', '引用'));
+
+  // Clear format
+  const clearBtn = document.createElement('button');
+  clearBtn.type = 'button'; clearBtn.title = '清除格式';
+  clearBtn.innerHTML = '&#x2718;';
+  clearBtn.style.cssText = btnBase;
+  clearBtn.addEventListener('click', () => { editor.focus(); document.execCommand('removeFormat'); editor.dispatchEvent(new Event('input')); });
+  toolbar.appendChild(clearBtn);
+  sep();
+
+  toolbar.appendChild(tbBtn('&#x21A9;', 'undo', null, '撤销'));
+  toolbar.appendChild(tbBtn('&#x21AA;', 'redo', null, '重做'));
+
+  container.appendChild(toolbar);
+
+  const editor = document.createElement('div');
+  editor.contentEditable = true;
+  editor.spellcheck = false;
+  editor.innerHTML = initialValue || '';
+  editor.style.cssText = 'min-height:280px;padding:14px 16px;outline:none;font-size:0.92rem;line-height:1.8;color:var(--starlight);background:var(--surface);cursor:text;overflow-y:auto';
+  editor.addEventListener('paste', (e) => { e.preventDefault(); document.execCommand('insertText', false, e.clipboardData.getData('text/plain')); });
+  container.appendChild(editor);
+
+  container._getValue = () => editor.innerHTML;
+  return container;
+}
+
+function renderFormField(f, value) {
+  if (f.type === 'tags') {
+    const tagVal = (value || '').replace(/"/g, '&quot;');
+    return `<div class="form-group"><label>${f.label}</label></div><div class="tag-placeholder" data-name="${f.key}" data-value="${tagVal}"></div>`;
+  }
+  if (f.type === 'richtext') {
+    return `<div class="form-group"><label>${f.label}</label></div><div class="richtext-placeholder" data-name="${f.key}" data-value="${(value||'').replace(/"/g,'&quot;').replace(/</g,'&lt;')}"></div>`;
+  }
+  if (f.type === 'textarea') {
+    return `<div class="form-group"><label>${f.label}</label><textarea name="${f.key}" rows="5">${value||''}</textarea></div>`;
+  }
+  // Image fields: show URL input + drop zone (skip project_url, social links etc)
+  if (f.key === 'cover_image' || f.key === 'image_url' || f.key === 'thumbnail_url' || f.key === 'url') {
+    const imgTag = value ? `<img src="${value}" onerror="this.style.display='none'">` : '';
+    return `<div class="form-group"><label>${f.label}</label>
+      <div class="img-upload-group">
+        <div><input name="${f.key}" value="${value||''}" placeholder="输入图片URL或拖拽上传..."></div>
+        <div class="drop-zone" data-target="${f.key}">
+          <input type="file" accept="image/*" class="drop-zone-input" data-target="${f.key}">
+          <span class="dz-text">拖拽或点击上传</span>
+          ${imgTag}
+        </div>
+      </div></div>`;
+  }
+  return `<div class="form-group"><label>${f.label}</label><input name="${f.key}" value="${value||''}"></div>`;
+}
+
+// ── Drop zone handlers ────────────────────────────────────
+function initDropZones() {
+  document.querySelectorAll('.drop-zone').forEach(zone => {
+    const fileInput = zone.querySelector('input[type="file"]');
+    ['dragenter','dragover'].forEach(evt => {
+      zone.addEventListener(evt, e => { e.preventDefault(); zone.classList.add('dragover'); });
+    });
+    ['dragleave','drop'].forEach(evt => {
+      zone.addEventListener(evt, e => { e.preventDefault(); zone.classList.remove('dragover'); });
+    });
+    zone.addEventListener('drop', e => {
+      const file = e.dataTransfer.files[0];
+      if (file) uploadImage(file, zone);
+    });
+    if (fileInput) {
+      fileInput.addEventListener('change', function() {
+        if (this.files[0]) uploadImage(this.files[0], zone);
+      });
+    }
+  });
+}
+
+async function uploadImage(file, zone) {
+  const target = zone.dataset.target;
+  const input = document.querySelector(`[name="${target}"]`);
+  if (!input) return;
+  zone.querySelector('.dz-text').textContent = '上传中...';
+  const formData = new FormData();
+  formData.append('file', file);
+  try {
+    const res = await fetch('/admin/upload', { method: 'POST', body: formData });
+    if (res.ok) {
+      const data = await res.json();
+      input.value = data.url;
+      zone.querySelector('.dz-text').textContent = '上传成功';
+      const img = zone.querySelector('img');
+      if (img) img.src = data.url;
+      else zone.insertAdjacentHTML('beforeend', `<img src="${data.url}" style="max-width:100%;max-height:120px;border-radius:6px;margin-top:6px">`);
+    } else {
+      zone.querySelector('.dz-text').textContent = '上传失败';
+    }
+  } catch {
+    zone.querySelector('.dz-text').textContent = '上传失败';
+  }
+}
+
+async function uploadImageToId(file, zone, inputId) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  zone.querySelector('.dz-text').textContent = '上传中...';
+  const formData = new FormData();
+  formData.append('file', file);
+  try {
+    const res = await fetch('/admin/upload', { method: 'POST', body: formData });
+    if (res.ok) {
+      const data = await res.json();
+      input.value = data.url;
+      zone.querySelector('.dz-text').textContent = '上传成功';
+      const img = zone.querySelector('img');
+      if (img) { img.src = data.url; img.style.display = ''; }
+      else zone.insertAdjacentHTML('beforeend', `<img src="${data.url}" style="max-width:100%;max-height:120px;border-radius:6px;margin-top:6px">`);
+    } else {
+      zone.querySelector('.dz-text').textContent = '上传失败';
+    }
+  } catch {
+    zone.querySelector('.dz-text').textContent = '上传失败';
+  }
+}
+
+// Override showModal to handle tag widgets after DOM insert
+const origShowModal = showModal;
+showModal = function(title, formHtml, onSave) {
+  origShowModal(title, formHtml, async function() {
+    // Gather values from tag/richtext widgets before saving
+    document.querySelectorAll('#modalBody .tag-input-wrap').forEach(widget => {
+      if (widget._value !== undefined) {
+        const hidden = document.createElement('input');
+        hidden.type = 'hidden'; hidden.name = widget.dataset.fieldName; hidden.value = widget._value;
+        document.getElementById('modalBody').appendChild(hidden);
+      }
+    });
+    document.querySelectorAll('[data-richtext]').forEach(el => {
+      if (el._getValue) {
+        const hidden = document.createElement('input');
+        hidden.type = 'hidden'; hidden.name = el.dataset.richtext; hidden.value = el._getValue();
+        el.appendChild(hidden);
+      }
+    });
+    await onSave();
+  });
+
+  // Attach widgets after DOM is ready
+  setTimeout(() => {
+    document.querySelectorAll('.tag-placeholder').forEach(el => {
+      const container = el.parentElement;
+      const initialValue = el.dataset.value?.replace(/&quot;/g, '"') || '[]';
+      const widget = createTagInput(el.dataset.name, initialValue);
+      el.replaceWith(widget);
+    });
+    document.querySelectorAll('.richtext-placeholder').forEach(el => {
+      const container = el.parentElement;
+      const editor = createRichTextEditor(el.dataset.name, el.dataset.value?.replace(/&quot;/g,'"').replace(/&lt;/g,'<') || '');
+      el.replaceWith(editor);
+    });
+    initDropZones();
+  }, 50);
+};
+function getLabel(type) {
+  const m = { projects:'项目', articles:'文章', photos:'照片', songs:'音乐', moments:'说说' };
+  return m[type] || type;
+}
+
+// ── Songs tab ─────────────────────────────────────────────
+async function loadSongsTab(container) {
+  const res = await api('GET', '/songs');
+  const songs = await res.json();
+
+  let html = `<div class="page-header"><h2>音乐管理</h2>
+    <button class="btn btn-primary" onclick="showCreateSongModal()">+ 手动添加</button></div>
+
+    <div class="card"><div class="card-header">从网易云音乐解析</div>
+    <div class="card-body">
+      <div class="parse-row">
+        <input id="neteaseUrl" placeholder="输入网易云歌曲链接或ID...">
+        <button class="btn btn-primary" onclick="parseNetease()" style="white-space:nowrap">解析</button>
+      </div>
+      <div class="parse-result" id="parseResult"></div>
+    </div></div>`;
+
+  if (songs.length) {
+    html += '<div class="card"><div class="card-body no-padding"><div class="table-wrap"><table><thead><tr><th>ID</th><th>封面</th><th>标题</th><th>歌手</th><th>时间</th><th style="text-align:right">操作</th></tr></thead><tbody>';
+    songs.forEach(s => {
+      html += `<tr>
+        <td>${s.id}</td>
+        <td>${s.cover_url ? `<img src="${s.cover_url}" style="width:36px;height:36px;border-radius:4px;object-fit:cover">` : '-'}</td>
+        <td>${s.title}</td><td>${s.artist||'-'}</td>
+        <td style="white-space:nowrap;font-size:0.78rem;color:var(--stardust)">${new Date(s.created_at).toLocaleString('zh-CN')}</td>
+        <td style="text-align:right;white-space:nowrap">
+          <button class="btn btn-sm btn-primary" onclick="showEditSongModal(${s.id})">编辑</button>
+          <button class="btn btn-sm btn-danger" onclick="deleteItem('songs', ${s.id}, '歌曲')">删除</button>
+        </td></tr>`;
+    });
+    html += '</tbody></table></div></div></div>';
+  }
+  container.innerHTML = html;
+}
+
+let lastParsedSong = null;
+window.parseNetease = async function() {
+  const url = document.getElementById('neteaseUrl').value.trim();
+  if (!url) return;
+  document.getElementById('parseResult').innerHTML = '<span style="color:var(--stardust)">解析中...</span>';
+  try {
+    const res = await api('POST', '/songs/parse', { url });
+    const song = await res.json();
+    lastParsedSong = song;
+    document.getElementById('parseResult').innerHTML = `
+      <div style="display:flex;align-items:center;gap:10px">
+        ${song.cover_url ? `<img src="${song.cover_url}" style="width:48px;height:48px;border-radius:6px">` : ''}
+        <div><strong>${song.title}</strong> - ${song.artist}</div>
+        <button class="btn btn-sm btn-primary" onclick="addParsedSong()">添加到歌单</button>
+      </div>`;
+  } catch(e) {
+    document.getElementById('parseResult').innerHTML = '<span style="color:var(--red)">解析失败: ' + e.message + '</span>';
+  }
+};
+
+window.addParsedSong = async function() {
+  if (!lastParsedSong) return;
+  const { lyrics, ...songData } = lastParsedSong;
+  await api('POST', '/songs', { ...songData, lyrics: lyrics || [] });
+  document.getElementById('parseResult').innerHTML = '<span style="color:var(--green)">已添加到歌单</span>';
+  lastParsedSong = null;
+  loadTab('tab-songs');
+};
+
+window.showCreateSongModal = function() {
+  showModal('添加歌曲', `
+    <div class="form-group"><label>标题</label><input name="title"></div>
+    <div class="form-group"><label>歌手</label><input name="artist"></div>
+    <div class="form-group"><label>音频URL</label><input name="audio_url"></div>
+    <div class="form-group"><label>封面URL</label><input name="cover_url"></div>
+    <div class="form-group"><label>歌词(JSON)</label><textarea name="lyrics" rows="3"></textarea></div>
+  `, async () => {
+    const data = {};
+    document.querySelectorAll('#modalBody [name]').forEach(el => data[el.name] = el.value);
+    let lyrics = data.lyrics; delete data.lyrics;
+    await api('POST', '/songs', { ...data, lyrics: lyrics || [] });
+    loadTab('tab-songs');
+  });
+};
+
+window.showEditSongModal = async function(id) {
+  const res = await api('GET', '/songs');
+  const songs = await res.json();
+  const song = songs.find(s => s.id === id);
+  if (!song) return;
+  let lyricsStr = '';
+  try { const lr = await fetch('/api/songs/'+id+'/lyrics'); lyricsStr = JSON.stringify(await lr.json()); } catch {}
+  showModal('编辑歌曲', `
+    <div class="form-group"><label>标题</label><input name="title" value="${song.title||''}"></div>
+    <div class="form-group"><label>歌手</label><input name="artist" value="${song.artist||''}"></div>
+    <div class="form-group"><label>音频URL</label><input name="audio_url" value="${song.audio_url||''}"></div>
+    <div class="form-group"><label>封面URL</label><input name="cover_url" value="${song.cover_url||''}"></div>
+    <div class="form-group"><label>歌词</label><textarea name="lyrics" rows="3">${lyricsStr}</textarea></div>
+  `, async () => {
+    const data = {};
+    document.querySelectorAll('#modalBody [name]').forEach(el => data[el.name] = el.value);
+    let lyrics = data.lyrics; delete data.lyrics;
+    await api('PUT', `/songs/${id}`, { ...data, lyrics: lyrics || [] });
+    loadTab('tab-songs');
+  });
+};
+
+// ── Comments tab ──────────────────────────────────────────
+async function loadCommentsTab(container) {
+  const res = await api('GET', '/comments');
+  const comments = await res.json();
+
+  let html = `<div class="page-header"><h2>留言管理</h2></div>
+    <div class="card"><div class="card-header">发布留言</div>
+    <div class="card-body">
+      <div class="form-inline">
+        <div><label>版块</label><select id="adminCommentSection"><option value="music">音乐</option><option value="about">关于我</option></select></div>
+        <div style="flex:3"><label>内容</label><textarea id="adminCommentText" rows="2" placeholder="输入留言..."></textarea></div>
+        <div><label>&nbsp;</label><button class="btn btn-primary" onclick="postAdminComment()" style="white-space:nowrap">发布留言</button></div>
+      </div>
+    </div></div>`;
+
+  if (comments.length) {
+    html += '<div class="card"><div class="card-body no-padding"><div class="table-wrap"><table><thead><tr><th>ID</th><th>版块</th><th>用户</th><th>内容</th><th>时间</th><th style="text-align:right">操作</th></tr></thead><tbody>';
+    comments.forEach(c => {
+      html += `<tr>
+        <td>${c.id}</td>
+        <td><span class="badge badge-${c.section==='music'?'music':'about'}">${c.section==='music'?'音乐':'关于'}</span></td>
+        <td>${c.github_username}${c.is_admin ? ' <span class="badge badge-author">作者</span>' : ''}</td>
+        <td><span class="text-truncate">${c.content.slice(0,60)}</span></td>
+        <td style="white-space:nowrap;font-size:0.78rem;color:var(--stardust)">${new Date(c.created_at).toLocaleString('zh-CN')}</td>
+        <td style="text-align:right"><button class="btn btn-sm btn-danger" onclick="deleteItem('comments', ${c.id}, '留言')">删除</button></td></tr>`;
+    });
+    html += '</tbody></table></div></div></div>';
+  }
+  container.innerHTML = html;
+}
+
+window.postAdminComment = async function() {
+  const section = document.getElementById('adminCommentSection').value;
+  const content = document.getElementById('adminCommentText').value.trim();
+  if (!content) return;
+  await api('POST', '/comments', { section, content });
+  document.getElementById('adminCommentText').value = '';
+  loadTab('tab-comments');
+};
+
+// ── Moment comments tab ───────────────────────────────────
+async function loadMomentCommentsTab(container) {
+  const [res, mRes] = await Promise.all([
+    api('GET', '/moment-comments'),
+    fetch('/api/moments')
+  ]);
+  const comments = await res.json();
+  const moments = await mRes.json();
+
+  const byMoment = {};
+  comments.forEach(c => {
+    if (!byMoment[c.moment_id]) byMoment[c.moment_id] = [];
+    byMoment[c.moment_id].push(c);
+  });
+
+  let html = '<div class="page-header"><h2>说说互动管理</h2></div>';
+
+  if (!moments.length) {
+    html += '<div class="card"><div class="card-body" style="text-align:center;color:var(--stardust);padding:40px">暂无说说</div></div>';
+    container.innerHTML = html;
+    return;
+  }
+
+  moments.sort((a, b) => b.id - a.id).forEach(moment => {
+    const list = byMoment[moment.id] || [];
+    html += `<div class="moment-group">
+      <div class="moment-group-header">
+        <div class="moment-text">${moment.content}</div>
+        <div class="moment-meta">${new Date(moment.created_at).toLocaleString('zh-CN')} · ${list.length} 条互动
+          <button class="btn btn-sm btn-primary" style="margin-left:12px" onclick="replyToMoment(${moment.id})">回复说说</button>
+        </div>
+      </div>`;
+
+    function renderTree(parentId, depth) {
+      let items = list.filter(c => c.parent_id === parentId).sort((a, b) => a.id - b.id);
+
+      // At root level, include orphaned comments whose parent no longer exists
+      if (depth === 0) {
+        const existingIds = new Set(list.map(c => c.id));
+        const orphans = list.filter(c => c.parent_id !== null && !existingIds.has(c.parent_id));
+        orphans.sort((a, b) => a.id - b.id).forEach(c => items.push(c));
+      }
+
+      return items.map(c => {
+        const parent = c.parent_id ? list.find(x => x.id === c.parent_id) : null;
+        return `
+        <div class="${depth > 0 ? 'comment-reply' : 'comment-item'}">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px">
+            <div style="flex:1;min-width:0">
+              <div style="margin-bottom:4px">
+                <strong>${c.github_username}</strong>
+                ${c.is_admin ? '<span class="badge badge-author">作者</span>' : ''}
+                ${parent ? '<span style="color:var(--firefly);font-size:0.8rem"> 回复 @'+parent.github_username+'</span>' : ''}
+                <span style="color:var(--stardust);font-size:0.78rem;margin-left:8px">${new Date(c.created_at).toLocaleString('zh-CN')}</span>
+              </div>
+              <div style="margin:4px 0">${c.content}</div>
+              <button class="btn btn-sm btn-primary" onclick="replyMomentComment(${c.id})">${depth > 0 ? '追评' : '回复'}</button>
+              <button class="btn btn-sm btn-danger" onclick="deleteItem('moment-comments', ${c.id}, '评论')">删除</button>
+            </div>
+          </div>
+          ${renderTree(c.id, depth + 1)}
+        </div>`;
+      }).join('');
+    }
+
+    html += renderTree(null, 0);
+    html += '</div>';
+  });
+
+  container.innerHTML = html;
+}
+
+window.replyToMoment = function(momentId) {
+  const content = prompt('输入回复内容：');
+  if (!content) return;
+  api('POST', '/moment-comments', { moment_id: momentId, content }).then(() => loadTab('tab-moment-comments'));
+};
+
+window.replyMomentComment = function(commentId) {
+  const content = prompt('输入回复内容：');
+  if (!content) return;
+  api('POST', '/moment-comments/' + commentId + '/reply', { content }).then(() => loadTab('tab-moment-comments'));
+};
+
+// ── Config tab ────────────────────────────────────────────
+async function loadConfigTab(container) {
+  const res = await fetch('/api/config');
+  const config = await res.json();
+  const labels = {
+    site_title:'网站标题', site_subtitle:'副标题', about_me:'关于我',
+    avatar_url:'头像URL', education:'教育经历', location:'所在城市', interests:'兴趣爱好',
+    github_url:'GitHub', qq:'QQ', email:'Email'
+  };
+  let html = '<div class="page-header"><h2>网站设置</h2><button class="btn btn-primary" onclick="saveConfig()">保存设置</button></div>';
+  html += '<div class="card"><div class="card-body"><div class="config-grid">';
+  Object.entries(labels).forEach(([key, label]) => {
+    const isLong = key === 'about_me';
+    html += `<div class="config-item${isLong?' full':''}"><label>${label}</label>`;
+    if (key === 'avatar_url') {
+      const val = config[key] || '';
+      const imgTag = val ? `<img src="${val}" onerror="this.style.display='none'">` : '';
+      html += `<div class="img-upload-group">
+        <div><input id="cfg_avatar_url" value="${val}" placeholder="输入头像URL或拖拽上传..."></div>
+        <div class="drop-zone" data-target-id="cfg_avatar_url">
+          <input type="file" accept="image/*" class="drop-zone-input">
+          <span class="dz-text">拖拽或点击上传</span>
+          ${imgTag}
+        </div>
+      </div>`;
+    } else if (isLong) {
+      html += `<textarea id="cfg_${key}" rows="5">${config[key]||''}</textarea>`;
+    } else {
+      html += `<input id="cfg_${key}" value="${config[key]||''}">`;
+    }
+    html += '</div>';
+  });
+  html += '</div></div></div>';
+  container.innerHTML = html;
+
+  const zone = container.querySelector('.drop-zone');
+  if (zone) {
+    ['dragenter','dragover'].forEach(evt => zone.addEventListener(evt, e => { e.preventDefault(); zone.classList.add('dragover'); }));
+    ['dragleave','drop'].forEach(evt => zone.addEventListener(evt, e => { e.preventDefault(); zone.classList.remove('dragover'); }));
+    zone.addEventListener('drop', e => { const f = e.dataTransfer.files[0]; if (f) uploadImageToId(f, zone, 'cfg_avatar_url'); });
+    zone.querySelector('input[type=file]').addEventListener('change', function() {
+      if (this.files[0]) uploadImageToId(this.files[0], zone, 'cfg_avatar_url');
+    });
+  }
+}
+
+window.saveConfig = async function() {
+  const keys = ['site_title','site_subtitle','about_me','avatar_url','education','location','interests','github_url','qq','email'];
+  const data = {};
+  keys.forEach(k => { const el = document.getElementById('cfg_'+k); if (el) data[k] = el.value; });
+  try {
+    await api('PUT', '/config', data);
+    alert('设置已保存');
+  } catch(e) { alert('保存失败: ' + e.message); }
+};
+</script>
+<!-- impeccable-live-start -->
+<script src="http://localhost:8400/live.js"></script>
+<!-- impeccable-live-end -->
+</body>
+</html>

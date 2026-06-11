@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="icon" href="/头像.png">
+  <title>管理登录 - Puearillの主页</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --cosmos: oklch(0.22 0.08 278);
+      --surface: oklch(0.28 0.05 278);
+      --starlight: oklch(0.93 0.003 280);
+      --stardust: oklch(0.73 0.006 278);
+      --nebula: oklch(0.62 0.012 280);
+      --void: oklch(0.30 0.03 280);
+      --glass-bg: oklch(0.28 0.05 278 / 0.55);
+      --glass-border: oklch(0.34 0.04 276 / 0.4);
+      --firefly: oklch(0.78 0.17 90);
+      --cosmos-flare: oklch(0.55 0.20 320);
+    }
+    [data-theme="light"] {
+      --cosmos: oklch(0.96 0.008 272);
+      --surface: oklch(0.99 0.002 270);
+      --starlight: oklch(0.15 0.018 280);
+      --stardust: oklch(0.35 0.025 280);
+      --nebula: oklch(0.50 0.018 280);
+      --void: oklch(0.82 0.02 275);
+      --glass-bg: oklch(0.99 0.002 270 / 0.55);
+      --glass-border: oklch(0.88 0.012 275 / 0.6);
+      --firefly: oklch(0.58 0.16 265);
+      --cosmos-flare: oklch(0.45 0.22 320);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Noto Sans SC', sans-serif;
+      background: linear-gradient(160deg, var(--cosmos) 0%, oklch(0.25 0.12 310) 100%);
+      min-height: 100vh; display: flex; align-items: center; justify-content: center;
+    }
+    [data-theme="light"] body {
+      background: linear-gradient(160deg, var(--cosmos) 0%, oklch(0.86 0.04 268) 100%);
+    }
+    .login-box {
+      background: var(--glass-bg);
+      backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+      border: 1px solid var(--glass-border);
+      border-radius: 18px; padding: 40px; width: 360px; max-width: 90vw;
+      box-shadow: 0 8px 32px oklch(0 0 0 / 0.3);
+    }
+    h1 { text-align: center; font-size: 1.5rem; margin-bottom: 8px; color: var(--starlight); }
+    .subtitle { text-align: center; font-size: 0.85rem; color: var(--stardust); margin-bottom: 24px; }
+    input {
+      width: 100%; padding: 12px 16px; margin-bottom: 14px;
+      border: 1px solid var(--glass-border); border-radius: 12px;
+      background: oklch(0.28 0.05 278 / 0.3); color: var(--starlight);
+      font-size: 0.95rem; outline: none; font-family: inherit;
+      transition: all 0.25s ease;
+      box-shadow: inset 0 1px 3px oklch(0 0 0 / 0.1);
+    }
+    [data-theme="light"] input { background: oklch(1 0 0 / 0.4); }
+    input:hover { border-color: var(--nebula); }
+    input:focus {
+      border-color: var(--firefly);
+      box-shadow: 0 0 0 3px oklch(0.78 0.17 90 / 0.12), inset 0 1px 3px oklch(0 0 0 / 0.08);
+    }
+    input::placeholder { color: var(--nebula); opacity: 0.7; }
+    button {
+      width: 100%; padding: 12px; border: none; border-radius: 12px;
+      background: linear-gradient(135deg, var(--cosmos-flare), var(--firefly));
+      color: #fff; font-size: 1rem; cursor: pointer; font-family: inherit;
+      font-weight: 600; transition: all 0.3s; letter-spacing: 0.3px;
+    }
+    button:hover { transform: translateY(-2px); box-shadow: 0 4px 20px oklch(0.78 0.17 90 / 0.3); }
+    .error { color: #e74c3c; font-size: 0.85rem; text-align: center; margin-top: 8px; display: none; }
+    .back { text-align: center; margin-top: 16px; }
+    .back a { color: var(--stardust); font-size: 0.85rem; transition: color .2s; text-decoration: none; }
+    .back a:hover { color: var(--firefly); }
+  </style>
+</head>
+<body>
+<div class="login-box">
+  <h1>管理登录</h1>
+  <p class="subtitle">Puearillの主页</p>
+  <input type="text" id="username" placeholder="用户名" autocomplete="username">
+  <input type="password" id="password" placeholder="密码" autocomplete="current-password">
+  <button onclick="login()">登录</button>
+  <p class="error" id="error">用户名或密码错误</p>
+  <div class="back"><a href="https://puearill.top">返回首页</a></div>
+</div>
+
+<script>
+async function login() {
+  const username = document.getElementById('username').value;
+  const password = document.getElementById('password').value;
+  if (!username || !password) return;
+
+  try {
+    const res = await fetch('/admin/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, password })
+    });
+    if (res.ok) {
+      window.location.href = '/admin-dashboard.html';
+    } else {
+      document.getElementById('error').style.display = 'block';
+    }
+  } catch {
+    document.getElementById('error').textContent = '网络错误';
+    document.getElementById('error').style.display = 'block';
+  }
+}
+document.getElementById('password').addEventListener('keydown', e => {
+  if (e.key === 'Enter') login();
+});
+</script>
+<!-- impeccable-live-start -->
+<script src="http://localhost:8400/live.js"></script>
+<!-- impeccable-live-end -->
+</body>
+</html>
